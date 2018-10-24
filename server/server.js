@@ -16,6 +16,18 @@ app.use(cookiePraser());
 
 // GET //
 
+// Checking if a user is logged in
+
+app.get('/api/auth', auth, (req, res) => {
+    res.json({
+        isAuth: true,
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name,
+        lastname: req.user.lastname
+    })
+})
+
 /*
 * User log out. 
 * After making a request auth middlware checks if a token is correct and gives a user back.
