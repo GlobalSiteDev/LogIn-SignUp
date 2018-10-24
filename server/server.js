@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 const cookiePraser = require('cookie-parser');
 const mongoose = require('mongoose');
 const config = require('./config/config').get(process.env.NODE_ENV);
-const { User } = require('./models/user');
 const app = express();
+
+const { User } = require('./models/user');
+const { auth } = require('./middleware/auth');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE);
@@ -12,7 +14,24 @@ mongoose.connect(config.DATABASE);
 app.use(bodyParser.json());
 app.use(cookiePraser());
 
+// GET //
+
+/*
+* User log out. 
+* After making a request auth middlware checks if a token is correct and gives a user back.
+* Then deleting the token from the DB.
+*/
+
+app.get('/api/logout', auth, (req, res) => {
+    req.user.deleteToken(req.token, (err, user) => {
+        if(err) return status(400).send(err);
+
+        res.sendStatus(200);
+    })
+})
+
 // POST //
+
 // Register user with email and password
 
 app.post('/api/register', (req, res) => {

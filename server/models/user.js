@@ -61,11 +61,12 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 
     bcrypt.compare(candidatePassword, user.password, (err, isMatch) => {
         if(err) return cb(err);
+
         cb(null, isMatch);
     })
 }
 
-// Generating token
+// Generating a token
 
 userSchema.methods.generateToken = function(cb) {
     let user = this;
@@ -73,6 +74,32 @@ userSchema.methods.generateToken = function(cb) {
     
     user.token = token;
     user.save((err, user) => {
+        if(err) return cb(err);
+
+        cb(null, user);
+    })
+}
+
+// Checking a token
+
+userSchema.statics.findByToken = function(token, cb) {
+    let user = this;
+
+    jwt.verify(token, config.SECRET, (err, decode) => {
+        user.findOne({"_id": decode, "token": token}, (err, user) => {
+            if(err) return cb(err);
+
+            cb(null, user)
+        })
+    })
+}
+
+// Deleting a token
+
+userSchema.methods.deleteToken = function(token, cb) {
+    let user = this;
+
+    user.update({$unset: {token: 1}}, (err, user) => {
         if(err) return cb(err);
 
         cb(null, user);
