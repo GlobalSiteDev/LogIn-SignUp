@@ -1,0 +1,18 @@
+.Container {
+    padding-top: 10vh;
+}
+
+.Container a {
+    text-decoration: none;
+}
+
+.Content {
+    width: 60%;
+    height: 300px;
+    margin: 10vh auto 0 auto;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
+                0 -4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background-color: #fff;
+}
