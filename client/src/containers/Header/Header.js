@@ -10,10 +10,6 @@ class Header extends Component {
         showNav: false
     }
 
-    onToggleNav = () => {
-        this.setState({showSideNav: true})
-    }
-
     render() {
         return (
             <header className={styles.Header}>
@@ -22,15 +18,17 @@ class Header extends Component {
                 </Link>
                 <FontAwesome 
                     name="bars"
+                    onClick={() => {this.setState({showNav: true})}}
                     style={{
                         color: '#fff',
                         float: 'right',
-                        marginRight: '15px'
+                        marginRight: '15px',
+                        cursor: 'pointer'
                     }}
                 />
                 <SideNav
                     showNav={this.state.showNav}
-                    onToggleNav={this.onToggleNav}
+                    onHideNav = {() => this.setState({showNav: false})}
                     />
             </header>
         )
