@@ -40,13 +40,24 @@ class LoginForm extends Component {
                 touched: false,
                 validationMessage: ''
             }
-        },
-        error: '',
-        success: false
+        }
     }
 
-    submitForm = () => {
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.user.login.isAuth) {
+            this.props.history.push('/user');
+        }
+    }
 
+    submitForm = (e) => {
+        e.preventDefault();
+
+        let requestBody = {
+            email: this.state.loginForm.email.value,
+            password: this.state.loginForm.password.value
+        }
+
+        this.props.dispatch(loginUser(requestBody));
     }
 
     checkValidity = (element, rules) => {
@@ -110,11 +121,11 @@ class LoginForm extends Component {
         updatedLoginForm[inputIdentifier] = updatedFormElement;
 
         this.setState({loginForm: updatedLoginForm});
-        console.log(updatedFormElement);
     }
 
     render() {
         const formElements = [];
+        let user = this.props.user;
 
         for (let key in this.state.loginForm) {
             formElements.push({
@@ -141,6 +152,13 @@ class LoginForm extends Component {
                             />
                     ))}
                     <button type="submit" className={styles.submitButton}>Log in</button>
+                    {
+                    // Showing error message if auth is failes
+
+                        user.login ?
+                        <div className={styles.errorMessage}><i>{user.login.message}</i></div>
+                        : null
+                    }
                 </form>
             </div>
         )
@@ -148,6 +166,7 @@ class LoginForm extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log(state);
     return {
         user: state.user
     }

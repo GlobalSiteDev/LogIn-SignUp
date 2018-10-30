@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Layout from './hoc/Layout';
+import Layout from './hoc/Layout/Layout';
 import Home from './components/Home/Home';
 import LoginForm from './containers/LoginForm/LoginForm';
 import UserProfile from './containers/UserProfile/UserProfile';

@@ -1,8 +1,12 @@
+import axios from 'axios';
 
+export function loginUser({email, password}) {
 
-export function loginUser() {
+    const request = axios.post('/login', {email, password})
+                    .then(response => response.data)
+                    
     return {
         type: 'USER_LOGIN',
-        payload: null
+        payload: request
     }
 }
