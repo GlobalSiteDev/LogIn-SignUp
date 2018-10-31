@@ -14,7 +14,7 @@ const sideNav = (props) => (
                     paddingTop: '30px'
                 }}
         >
-            <Items />
+            <Items onClick={props.onClick} />
         </SideNav>
     </div>
 )

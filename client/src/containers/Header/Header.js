@@ -28,7 +28,8 @@ class Header extends Component {
                 />
                 <SideNav
                     showNav={this.state.showNav}
-                    onHideNav = {() => this.setState({showNav: false})}
+                    onHideNav={() => this.setState({showNav: false})}
+                    onClick={() => this.setState({showNav: false})}
                     />
             </header>
         )

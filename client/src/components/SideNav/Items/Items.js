@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import FontAwesome from 'react-fontawesome';
 import styles from './Items.module.css';
 
-const Items = () => {
+const Items = (props) => {
 
     const items = [
         {
@@ -30,7 +30,7 @@ const Items = () => {
 
     const element = (item, i) => (
         <div key={i} className={styles.navItem}>
-            <Link to={item.link}>
+            <Link to={item.link} onClick={props.onClick}>
                 <FontAwesome name={item.icon} />
                 {item.text}
             </Link>
