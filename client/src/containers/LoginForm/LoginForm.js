@@ -13,7 +13,8 @@ class LoginForm extends Component {
                 elementConfig: {
                     type: 'email',
                     label: 'Email',
-                    placeholder: 'Enter your email'
+                    placeholder: 'Enter your email',
+                    autoComplete: 'username'
                 },
                 value: '',
                 validation: {
@@ -29,7 +30,8 @@ class LoginForm extends Component {
                 elementConfig: {
                     type: 'password',
                     label: 'Password',
-                    placeholder: 'Enter your password'
+                    placeholder: 'Enter your password',
+                    autoComplete: 'current-password'
                 },
                 value: '',
                 validation: {
@@ -166,7 +168,6 @@ class LoginForm extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state);
     return {
         user: state.user
     }
