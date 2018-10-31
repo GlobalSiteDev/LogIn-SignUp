@@ -5,14 +5,15 @@ import Layout from './hoc/Layout/Layout';
 import Home from './components/Home/Home';
 import LoginForm from './containers/LoginForm/LoginForm';
 import UserProfile from './containers/UserProfile/UserProfile';
+import Auth from './hoc/Auth/Auth';
 
 const routes = () => {
     return (
         <Layout>
             <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/login" exact component={LoginForm} />
-                <Route path="/user" exact component={UserProfile} />
+                <Route path="/" exact component={Auth(Home, false)} />
+                <Route path="/login" exact component={Auth(LoginForm, false)} />
+                <Route path="/user" exact component={Auth(UserProfile, true)} />
             </Switch>
         </Layout>
     );
