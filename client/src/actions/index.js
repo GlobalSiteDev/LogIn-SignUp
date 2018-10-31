@@ -21,3 +21,13 @@ export function auth() {
         payload: request
     }
 }
+
+export function logoutUser() {
+    const request = axios.get('/logout')
+                    .then(response => response.data)
+    
+    return {
+        type: 'USER_LOGOUT',
+        payload: request
+    }
+}

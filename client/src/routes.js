@@ -6,6 +6,7 @@ import Home from './components/Home/Home';
 import LoginForm from './containers/LoginForm/LoginForm';
 import UserProfile from './containers/UserProfile/UserProfile';
 import Auth from './hoc/Auth/Auth';
+import Logout from './containers/Logout/Logout';
 
 const routes = () => {
     return (
@@ -14,6 +15,7 @@ const routes = () => {
                 <Route path="/" exact component={Auth(Home, false)} />
                 <Route path="/login" exact component={Auth(LoginForm, false)} />
                 <Route path="/user" exact component={Auth(UserProfile, true)} />
+                <Route path="/user/logout" exact component={Auth(Logout, true)} />
             </Switch>
         </Layout>
     );
