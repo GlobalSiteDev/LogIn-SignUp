@@ -8,7 +8,7 @@ class Logout extends Component {
     componentWillMount() {
         setTimeout(() => {
             this.props.dispatch(logoutUser())
-        }, 2000);
+        }, 1500);
     }
 
     render() {
