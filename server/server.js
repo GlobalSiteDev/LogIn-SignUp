@@ -14,6 +14,8 @@ mongoose.connect(config.DATABASE);
 app.use(bodyParser.json());
 app.use(cookiePraser());
 
+app.use(express.static('client/build'));
+
 // GET //
 
 // Checking if a user is logged in
@@ -93,6 +95,15 @@ app.post('/api/login', (req, res) => {
         })
     })
 })
+
+// Configuring for production
+
+if(process.env.NODE_ENV === 'production') {
+    const path = require('path');
+    app.get('/*', (req, res) => {
+        res.sendfile(path.resolve(__dirname, '../client','build', 'index.html'))
+    })
+}
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
