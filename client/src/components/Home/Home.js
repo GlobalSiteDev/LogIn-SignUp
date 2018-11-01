@@ -7,9 +7,9 @@ const home = () => (
         <div className={styles.Content}>
             <h3>Welcome to my test asignment!</h3>
             <p>To enter your profile</p>
-            <Link to="/login">LOG IN</Link>
+            <Link to="/login" className={styles.LoginLink}>LOG IN</Link>
             <p>or</p>
-            <Link to="/register">SIGN UP</Link>
+            <Link to="/register" className={styles.SignupLink}>SIGN UP</Link>
         </div>
     </div>
 )
