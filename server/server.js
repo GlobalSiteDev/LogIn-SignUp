@@ -9,7 +9,7 @@ const { User } = require('./models/user');
 const { auth } = require('./middleware/auth');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/testApp');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://admin:19SecretPassword92@ds249123.mlab.com:49123/heroku_mx2wcd8m');
 
 app.use(bodyParser.json());
 app.use(cookiePraser());
