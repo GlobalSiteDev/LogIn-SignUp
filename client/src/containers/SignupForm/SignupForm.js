@@ -1,20 +1,50 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { loginUser } from '../../actions';
-import styles from './LoginForm.module.css';
+import  { connect } from 'react-redux';
+import { registerUser } from '../../actions';
 import Input from '../../components/UI/Input/Input';
+import styles from './SignupForm.module.css';
 
-class LoginForm extends Component {
-
+class SignupForm extends Component {
     state = {
-        loginForm: {
+        signupForm: {
+            name: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    label: 'Name',
+                    placeholder: 'Enter your first name',
+                },
+                value: '',
+                validation: {
+                    required: true,
+                    maxLength: 100
+                },
+                valid: false,
+                touched: false,
+                validationMessage: ''
+            },
+            lastname: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    label: 'Last name',
+                    placeholder: 'Enter your last name',
+                },
+                value: '',
+                validation: {
+                    required: true,
+                    maxLength: 100
+                },
+                valid: false,
+                touched: false,
+                validationMessage: ''
+            },
             email: {
                 elementType: 'input',
                 elementConfig: {
                     type: 'email',
                     label: 'Email',
                     placeholder: 'Enter your email',
-                    autoComplete: 'username'
                 },
                 value: '',
                 validation: {
@@ -31,7 +61,6 @@ class LoginForm extends Component {
                     type: 'password',
                     label: 'Password',
                     placeholder: 'Enter your password',
-                    autoComplete: 'current-password'
                 },
                 value: '',
                 validation: {
@@ -46,20 +75,22 @@ class LoginForm extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.user.login.isAuth) {
+        if(nextProps.user.user.isAuth) {
             this.props.history.push('/user');
         }
     }
-
+    
     submitForm = (e) => {
         e.preventDefault();
 
         let requestBody = {
-            email: this.state.loginForm.email.value,
-            password: this.state.loginForm.password.value
+            name: this.state.signupForm.name.value,
+            lastname: this.state.signupForm.lastname.value,
+            email: this.state.signupForm.email.value,
+            password: this.state.signupForm.password.value
         }
 
-        this.props.dispatch(loginUser(requestBody));
+        this.props.dispatch(registerUser(requestBody));
     }
 
     checkValidity = (element, rules) => {
@@ -83,15 +114,15 @@ class LoginForm extends Component {
         }
 
         if(rules.minLength) {
-            isValid = element.value.length >= rules.minLength && isValid;
-            const message = `${ !isValid ? `Your ${element.elementConfig.type} should be at least ${rules.minLength} characters long` : ''}`;
+            isValid = element.value.length >= rules.minLength;
+            const message = `${ !isValid ? `Your ${element.elementConfig.label} should be at least ${rules.minLength} characters long` : ''}`;
 
             error = !isValid ? [isValid, message] : error;
         }
 
         if(rules.maxLength) {
-            isValid = element.value.length <= rules.minLength && isValid;
-            const message = `${ !isValid ? `Your ${element.elementConfig.type} should be less than ${rules.minLength} characters long` : ''}`;
+            isValid = element.value.length <= rules.maxLength;
+            const message = `${ !isValid ? `Your ${element.elementConfig.label} should be less than ${rules.maxLength} characters long` : ''}`;
 
             error = !isValid ? [isValid, message] : error;
         }
@@ -103,11 +134,11 @@ class LoginForm extends Component {
 
         // Clone deeply with spread operator
 
-        const updatedLoginForm = {
-            ...this.state.loginForm
+        const updatedSignupForm = {
+            ...this.state.signupForm
         };
         const updatedFormElement = {
-            ...updatedLoginForm[inputIdentifier]
+            ...updatedSignupForm[inputIdentifier]
         };
 
         // Updating the field value
@@ -120,21 +151,29 @@ class LoginForm extends Component {
         updatedFormElement.validationMessage = this.checkValidity(updatedFormElement, updatedFormElement.validation)[1];
 
         updatedFormElement.touched = true;
-        updatedLoginForm[inputIdentifier] = updatedFormElement;
+        updatedSignupForm[inputIdentifier] = updatedFormElement;
 
-        this.setState({loginForm: updatedLoginForm});
+        this.setState({signupForm: updatedSignupForm});
     }
+
+
+
+
+
+
+
 
     render() {
         const formElements = [];
         let user = this.props.user;
 
-        for (let key in this.state.loginForm) {
+        for (let key in this.state.signupForm) {
             formElements.push({
                 id: key,
-                config: this.state.loginForm[key]
+                config: this.state.signupForm[key]
             });
         }
+
 
 
         return (
@@ -153,13 +192,14 @@ class LoginForm extends Component {
                             errorMessage={formElement.config.validationMessage}
                             />
                     ))}
-                    <button type="submit" className={styles.submitButton}>Log in</button>
+                    <button type="submit" className={styles.submitButton}>Sign Up</button>
                     {
-                    // Showing error message if auth is failes
-
-                        user.login ?
-                        <div className={styles.errorMessage}><i>{user.login.message}</i></div>
-                        : null
+                    // Showing error message if account already exists
+                        
+                        user.user ?
+                            <div className={styles.errorMessage}><i>{user.user.message}</i></div>
+                        :   
+                            null
                     }
                 </form>
             </div>
@@ -173,4 +213,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(LoginForm);
+export default connect(mapStateToProps)(SignupForm);

@@ -1,8 +1,9 @@
 import React from 'react';
-import Header from '../components/Header/Header';
+import styles from './Layout.module.css';
+import Header from '../../containers/Header/Header';
 
 const layout = (props) => (
-    <div>
+    <div className={styles.MainContainer}>
         <Header />
         <div>
             {props.children}

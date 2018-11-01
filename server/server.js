@@ -44,17 +44,27 @@ app.get('/api/logout', auth, (req, res) => {
 
 // POST //
 
-// Register user with email and password
+// Register user
 
 app.post('/api/register', (req, res) => {
-    const user = new User(req.body);
+    User.findOne({'email': req.body.email}, (err, user) => {
+        if(user) return res.json({isAuth: false, message: 'Email is already taken! Log in or use another email'});
 
-    user.save((err, doc) => {
-        if(err) return res.status(400).send(err);
+        let newUser = new User(req.body);
 
-        res.status(200).json({
-            success: true,
-            user: doc
+        newUser.save((err, doc) => {
+            if(err) return res.status(400).send(err);
+
+            newUser.generateToken((err, user) => {
+                if(err) return res.status(400).send(err);
+
+                res.cookie('auth', user.token).send({
+                    isAuth: true,
+                    id: user._id,
+                    email: user.email,
+                    user: doc
+                })
+            })
         })
     })
 })
@@ -63,12 +73,12 @@ app.post('/api/register', (req, res) => {
 
 app.post('/api/login', (req, res) => {
     User.findOne({'email': req.body.email}, (err, user) => {
-        if(!user) return res.json({isAuth: false, message: 'Auth failed, email not found'});
+        if(!user) return res.json({isAuth: false, message: 'Email not found! Sign up please'});
 
         user.comparePassword(req.body.password, (err, isMatch) => {
             if(!isMatch) return res.json({
                 isAuth: false,
-                message: 'Wrong password'
+                message: 'Wrong password!'
             });
 
             user.generateToken((err, user) => {
