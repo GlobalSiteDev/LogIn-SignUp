@@ -44,17 +44,27 @@ app.get('/api/logout', auth, (req, res) => {
 
 // POST //
 
-// Register user with email and password
+// Register user
 
 app.post('/api/register', (req, res) => {
-    const user = new User(req.body);
+    User.findOne({'email': req.body.email}, (err, user) => {
+        if(user) return res.json({isAuth: false, message: 'Email is already taken! Log in or use another email'});
 
-    user.save((err, doc) => {
-        if(err) return res.status(400).send(err);
+        let newUser = new User(req.body);
 
-        res.status(200).json({
-            success: true,
-            user: doc
+        newUser.save((err, doc) => {
+            if(err) return res.status(400).send(err);
+
+            newUser.generateToken((err, user) => {
+                if(err) return res.status(400).send(err);
+
+                res.cookie('auth', user.token).send({
+                    isAuth: true,
+                    id: user._id,
+                    email: user.email,
+                    user: doc
+                })
+            })
         })
     })
 })

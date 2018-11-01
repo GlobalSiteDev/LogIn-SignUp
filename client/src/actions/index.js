@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+export function registerUser({name, lastname, email, password}) {
+    const request = axios.post('/register', {name, lastname, email, password})
+                    .then(response => response.data)
+                    
+    return {
+        type: 'USER_REGISTER',
+        payload: request
+    }
+}
+
 export function loginUser({email, password}) {
 
     const request = axios.post('/login', {email, password})
