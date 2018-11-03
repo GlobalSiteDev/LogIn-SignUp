@@ -9,7 +9,7 @@ const { User } = require('./models/user');
 const { auth } = require('./middleware/auth');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://admin:19SecretPassword92@ds249123.mlab.com:49123/heroku_mx2wcd8m');
+mongoose.connect(config.DATABASE);
 
 app.use(bodyParser.json());
 app.use(cookiePraser());
@@ -59,11 +59,10 @@ app.post('/api/register', (req, res) => {
 
             newUser.generateToken((err, user) => {
                 if(err) return res.status(400).send(err);
-
+                // Expiry date of the cookie is not specified so creating a session cookie. If need to specify
+                // add property {expires: new Date(Date.now() + timeNeeded)}
                 res.cookie('auth', user.token).send({
                     isAuth: true,
-                    id: user._id,
-                    email: user.email,
                     user: doc
                 })
             })
@@ -85,11 +84,10 @@ app.post('/api/login', (req, res) => {
 
             user.generateToken((err, user) => {
                 if(err) return res.status(400).send(err);
-
+                // Expiry date of the cookie is not specified so creating a session cookie. If need to specify
+                // add property {expires: new Date(Date.now() + timeNeeded)}
                 res.cookie('auth', user.token).send({
-                    isAuth: true,
-                    id: user._id,
-                    email: user.email
+                    isAuth: true
                 })
             })
         })
