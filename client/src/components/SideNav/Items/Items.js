@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import FontAwesome from 'react-fontawesome';
 import styles from './Items.module.css';
+import { connect } from 'react-redux';
 
 const Items = (props) => {
 
@@ -10,21 +11,27 @@ const Items = (props) => {
             icon: 'user',
             text: 'Profile',
             link: '/user',
+            restricted: true
         },
         {
             icon: 'sign-in',
             text: 'Log in',
             link: '/login',
+            restricted: false,
+            exclude: true
         },
         {
             icon: 'user-plus',
             text: 'Sign up',
             link: '/register',
+            restricted: false,
+            exclude: true
         },
         {
             icon: 'sign-out',
             text: 'Log out',
             link: '/user/logout',
+            restricted: false
         }
     ]
 
@@ -38,9 +45,23 @@ const Items = (props) => {
     )
 
     const showItems = () => (
-        items.map((item, i) => {
-            return element(item, i);
-        })
+        props.user.auth ? 
+            items.map((item, i) => {
+                if(props.user.auth.isAuth) {
+                    return !item.exclude ?
+                                element(item, i)
+                            :   null
+                    
+                } else {
+                    return !item.restricted ?
+                                element(item, i)
+                            :   null
+                }
+
+
+                /* return element(item, i); */
+            })
+        :   null    
     )
 
     return(
@@ -50,4 +71,10 @@ const Items = (props) => {
     )
 }
 
-export default Items;
+function mapStateToProps(state) {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(mapStateToProps)(Items);
