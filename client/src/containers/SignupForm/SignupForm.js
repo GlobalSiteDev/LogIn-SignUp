@@ -156,13 +156,6 @@ class SignupForm extends Component {
         this.setState({signupForm: updatedSignupForm});
     }
 
-
-
-
-
-
-
-
     render() {
         const formElements = [];
         let user = this.props.user;
@@ -173,8 +166,6 @@ class SignupForm extends Component {
                 config: this.state.signupForm[key]
             });
         }
-
-
 
         return (
             <div className={styles.Container}>
